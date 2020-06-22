@@ -1,1 +1,1 @@
-module-lite.sh
+module-lite-hevc-self.sh
