@@ -368,11 +368,11 @@ int ijkmp_set_data_source(IjkMediaPlayer *mp, const char *url)
 {
     assert(mp);
     assert(url);
-    MPTRACE("ijkmp_set_data_source(url=\"%s\")\n", url);
+    //MPTRACE("ijkmp_set_data_source(url=\"%s\")\n", url);
     pthread_mutex_lock(&mp->mutex);
     int retval = ijkmp_set_data_source_l(mp, url);
     pthread_mutex_unlock(&mp->mutex);
-    MPTRACE("ijkmp_set_data_source(url=\"%s\")=%d\n", url, retval);
+    //MPTRACE("ijkmp_set_data_source(url=\"%s\")=%d\n", url, retval);
     return retval;
 }
 

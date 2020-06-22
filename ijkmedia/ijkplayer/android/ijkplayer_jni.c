@@ -164,7 +164,7 @@ IjkMediaPlayer_setDataSourceAndHeaders(
     c_path = (*env)->GetStringUTFChars(env, path, NULL );
     JNI_CHECK_GOTO(c_path, env, "java/lang/OutOfMemoryError", "mpjni: setDataSource: path.string oom", LABEL_RETURN);
 
-    ALOGV("setDataSource: path %s", c_path);
+    //ALOGV("setDataSource: path %s", c_path);
     retval = ijkmp_set_data_source(mp, c_path);
     (*env)->ReleaseStringUTFChars(env, path, c_path);
 
