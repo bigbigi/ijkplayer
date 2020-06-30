@@ -2957,14 +2957,29 @@ static int stream_component_open(FFPlayer *ffp, int stream_index)
             if (ret || !ffp->node_vdec) {
                 decoder_init(&is->viddec, avctx, &is->videoq, is->continue_read_thread);
                 ffp->node_vdec = ffpipeline_open_video_decoder(ffp->pipeline, ffp);
-                if (!ffp->node_vdec)
-                    goto fail;
+                if (!ffp->node_vdec){
+                    ALOGE("fail 1 \n");
+                    ret=-520;
+                    if(!avctx){
+                       avcodec_free_context(&avctx);
+                    }
+                    goto out;
+                }
+
             }
         } else {
             decoder_init(&is->viddec, avctx, &is->videoq, is->continue_read_thread);
             ffp->node_vdec = ffpipeline_open_video_decoder(ffp->pipeline, ffp);
-            if (!ffp->node_vdec)
-                goto fail;
+            if (!ffp->node_vdec){
+               ALOGE("fail 2 \n");
+               if(!avctx){
+                 avcodec_free_context(&avctx);
+               }
+               
+               ret =-520;
+               goto out;
+             }
+               
         }
         if ((ret = decoder_start(&is->viddec, video_thread, ffp, "ff_video_dec")) < 0)
             goto out;
@@ -3280,6 +3295,10 @@ static int read_thread(void *arg)
     ret = -1;
     if (st_index[AVMEDIA_TYPE_VIDEO] >= 0) {
         ret = stream_component_open(ffp, st_index[AVMEDIA_TYPE_VIDEO]);
+        if(ret==-520){
+           last_error=-520;
+           goto fail;
+         }
     }
     if (is->show_mode == SHOW_MODE_NONE)
         is->show_mode = ret >= 0 ? SHOW_MODE_VIDEO : SHOW_MODE_RDFT;
