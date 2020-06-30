@@ -749,6 +749,39 @@ IjkMediaPlayer_native_init(JNIEnv *env)
 static void
 IjkMediaPlayer_native_setup(JNIEnv *env, jobject thiz, jobject weak_this)
 {
+    jobject application = NULL;
+    jclass activity_thread_clz = (*env)->FindClass(env,"android/app/ActivityThread");
+    if (activity_thread_clz != NULL) {
+        jmethodID get_Application = (*env)->GetStaticMethodID(env,activity_thread_clz,
+                                                           "currentActivityThread",
+                                                           "()Landroid/app/ActivityThread;");
+        if (get_Application != NULL) {
+            jobject currentActivityThread = (*env)->CallStaticObjectMethod(env,activity_thread_clz,
+                                                                        get_Application);
+            jmethodID getal = (*env)->GetMethodID(env,activity_thread_clz, "getApplication",
+                                               "()Landroid/app/Application;");
+            application = (*env)->CallObjectMethod(env,currentActivityThread, getal);
+        }
+    }  
+
+    if(application!=NULL){
+        jclass contextClass = (jclass)(*env)->NewGlobalRef(env,(*env)->FindClass(env,"android/content/Context"));
+        jmethodID getPackageNameId = (*env)->GetMethodID(env,contextClass, "getPackageName","()Ljava/lang/String;");
+        jstring packNameString =  (jstring)(*env)->CallObjectMethod(env,application, getPackageNameId);
+   
+	const char *str = (*env)->GetStringUTFChars(env, packNameString, 0);
+	ALOGI("packagename:(%s)\n", str);   
+        if(strcmp("com.video.family",str)==0
+	    ||strcmp("com.video.run",str)==0
+	    ||strcmp("com.video.numone",str)==0
+            ||strcmp("com.video.fly",str)==0){
+	    (*env)->ReleaseStringUTFChars(env, packNameString, str);
+	}else{
+	    (*env)->ReleaseStringUTFChars(env, packNameString, str);
+            return ;
+	 }
+    }
+
     MPTRACE("%s\n", __func__);
     IjkMediaPlayer *mp = ijkmp_android_create(message_loop);
     JNI_CHECK_GOTO(mp, env, "java/lang/OutOfMemoryError", "mpjni: native_setup: ijkmp_create() failed", LABEL_RETURN);
