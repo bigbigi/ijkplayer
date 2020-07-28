@@ -2342,6 +2342,10 @@ static int video_thread(void *arg)
 
     if (ffp->node_vdec) {
         ret = ffpipenode_run_sync(ffp->node_vdec);
+        ALOGI("video_thread %d \n",ret);
+        if(ret==-1000){
+           ffp_notify_msg2(ffp, FFP_MSG_ERROR, -521);
+        }
     }
     return ret;
 }
@@ -3154,7 +3158,7 @@ static int read_thread(void *arg)
     if (ffp->genpts)
         ic->flags |= AVFMT_FLAG_GENPTS;
 
-    av_format_inject_global_side_data(ic);
+    //av_format_inject_global_side_data(ic);
     //
     //AVDictionary **opts;
     //int orig_nb_streams;
