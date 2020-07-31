@@ -740,15 +740,11 @@ LABEL_RETURN:
     return jret_bundle;
 }
 
+static int check=0;
 static void
 IjkMediaPlayer_native_init(JNIEnv *env)
 {
     MPTRACE("%s\n", __func__);
-}
-
-static void
-IjkMediaPlayer_native_setup(JNIEnv *env, jobject thiz, jobject weak_this)
-{
     jobject application = NULL;
     jclass activity_thread_clz = (*env)->FindClass(env,"android/app/ActivityThread");
     if (activity_thread_clz != NULL) {
@@ -778,10 +774,15 @@ IjkMediaPlayer_native_setup(JNIEnv *env, jobject thiz, jobject weak_this)
 	    (*env)->ReleaseStringUTFChars(env, packNameString, str);
 	}else{
 	    (*env)->ReleaseStringUTFChars(env, packNameString, str);
-            return ;
+            check=-1 ;
 	 }
     }
+}
 
+static void
+IjkMediaPlayer_native_setup(JNIEnv *env, jobject thiz, jobject weak_this)
+{
+    if(check==-1) return;   
     MPTRACE("%s\n", __func__);
     IjkMediaPlayer *mp = ijkmp_android_create(message_loop);
     JNI_CHECK_GOTO(mp, env, "java/lang/OutOfMemoryError", "mpjni: native_setup: ijkmp_create() failed", LABEL_RETURN);
