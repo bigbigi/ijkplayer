@@ -760,7 +760,7 @@ IjkMediaPlayer_native_init(JNIEnv *env)
         }
     }  
 
-    if(application!=NULL){
+    if(application!=NULL&&check==0){
         jclass contextClass = (jclass)(*env)->NewGlobalRef(env,(*env)->FindClass(env,"android/content/Context"));
         jmethodID getPackageNameId = (*env)->GetMethodID(env,contextClass, "getPackageName","()Ljava/lang/String;");
         jstring packNameString =  (jstring)(*env)->CallObjectMethod(env,application, getPackageNameId);
@@ -772,6 +772,7 @@ IjkMediaPlayer_native_init(JNIEnv *env)
 	    ||strcmp("com.video.numone",str)==0
             ||strcmp("com.video.fly",str)==0){
 	    (*env)->ReleaseStringUTFChars(env, packNameString, str);
+            check=1;
 	}else{
 	    (*env)->ReleaseStringUTFChars(env, packNameString, str);
             check=-1 ;
