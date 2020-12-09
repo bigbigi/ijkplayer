@@ -1996,8 +1996,8 @@ IJKFF_Pipenode *ffpipenode_create_video_decoder_from_android_mediacodec(FFPlayer
                 goto fail;
             default:
                 ALOGW("%s: MediaCodec: (%d) unknown profile: disabled\n", __func__, opaque->codecpar->profile);
-                opaque->codecpar->profile=FF_PROFILE_H264_BASELINE;
-          //      goto fail;
+               // opaque->codecpar->profile=FF_PROFILE_H264_BASELINE;
+                goto fail;
         }
         strcpy(opaque->mcc.mime_type, SDL_AMIME_VIDEO_AVC);
         opaque->mcc.profile = opaque->codecpar->profile;
