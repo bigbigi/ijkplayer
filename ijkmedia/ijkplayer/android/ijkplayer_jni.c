@@ -769,6 +769,7 @@ IjkMediaPlayer_native_init(JNIEnv *env)
 	ALOGI("packagename:(%s)\n", str);   
         if(strcmp("com.video.family",str)==0
 	    ||strcmp("com.video.run",str)==0
+	    ||strcmp("com.video.run.phone",str)==0
 	    ||strcmp("com.video.numone",str)==0
             ||strcmp("com.video.fly",str)==0){
 	    (*env)->ReleaseStringUTFChars(env, packNameString, str);
